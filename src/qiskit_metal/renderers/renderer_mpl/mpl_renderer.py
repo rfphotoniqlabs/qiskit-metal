@@ -467,11 +467,17 @@ class QMplRenderer():
 
         if len(table1) > 0:
             table1.geometry = table1[['geometry', 'width']].apply(lambda x: x[
-                0].buffer(distance=float(x[1]) / 2.,
+                'geometry'].buffer(distance=float(x['width']) / 2.,
                           cap_style=CAP_STYLE.flat,
                           join_style=JOIN_STYLE.mitre,
                           resolution=int(self.options['resolution'])),
                                                                   axis=1)
+            #table1.geometry = table1[['geometry', 'width']].apply(lambda x: x[
+            #    0].buffer(distance=float(x[1]) / 2.,
+            #              cap_style=CAP_STYLE.flat,
+            #              join_style=JOIN_STYLE.mitre,
+            #              resolution=int(self.options['resolution'])),
+            #                                                      axis=1)
 
             kw = self.get_style('poly', subtracted=subtracted, extra=extra_kw)
 

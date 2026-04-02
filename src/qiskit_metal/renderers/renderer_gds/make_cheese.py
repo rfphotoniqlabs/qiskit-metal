@@ -358,7 +358,17 @@ class Cheesing:
         # the keepout (no_cheese) cell may not be in self.lib.
         temp_keepout_chip_layer_cell = f"temp_keepout_{self.chip_name}_{self.layer}"
         temp_keepout_cell = self.lib.new_cell(temp_keepout_chip_layer_cell)
-        temp_keepout_cell.add(*self.nocheese_gds)
+        #temp_keepout_cell.add(*self.nocheese_gds)
+        _valid_nocheese = []
+        for _item in self.nocheese_gds:
+            if isinstance(_item, (gdstk.Polygon, gdstk.FlexPath,
+                        gdstk.RobustPath, gdstk.Label,
+                        gdstk.Reference)):
+                _valid_nocheese.append(_item)
+            elif isinstance(_item, np.ndarray):
+                _valid_nocheese.append(gdstk.Polygon(_item))
+        if _valid_nocheese:
+            temp_keepout_cell.add(*_valid_nocheese)
         diff_holes = gdstk.boolean(
             gather_holes_cell.get_polygons(),
             temp_keepout_cell.get_polygons(),
